@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+       <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="navbar.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ping Pong Game</title>
+    <style>
+      canvas {
+        display: block;
+        margin: auto;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+       <ul>
+  <li><a class="active" href="game.html">tic tac toe</a></li>
+  <li><a href="pingpong.html">ping pong</a></li>
+  <li><a href="violinplayers.html">vivaldi</a></li>
+  <li><a href="index.html">home</a></li>
+</ul>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <script>
+      const canvas = document.getElementById('gameCanvas')
+      const ctx = canvas.getContext('2d')
+
+      const ball = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 10,
+        dx: 5,
+        dy: 5,
+      }
+
+      const paddleHeight = 100
+      const paddleWidth = 20
+      let paddle1Y = (canvas.height - paddleHeight) / 2
+      let paddle2Y = (canvas.height - paddleHeight) / 2
+      const paddleSpeed = 10
+
+      let score1 = 0
+      let score2 = 0
+
+      document.addEventListener('keydown', keyDownHandler)
+      document.addEventListener('keyup', keyUpHandler)
+
+      function keyDownHandler(event) {
+        if (event.key === 'ArrowUp') {
+          paddle2Y -= paddleSpeed
+        } else if (event.key === 'ArrowDown') {
+          paddle2Y += paddleSpeed
+        } else if (event.key === 'w') {
+          paddle1Y -= paddleSpeed
+        } else if (event.key === 's') {
+          paddle1Y += paddleSpeed
+        }
+      }
+
+      function keyUpHandler(event) {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+          paddle2Y += 0
+        } else if (event.key === 'w' || event.key === 's') {
+          paddle1Y += 0
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        drawBall()
+        drawPaddle1()
+        drawPaddle2()
+        drawScore()
+        moveBall()
+        movePaddles()
+        requestAnimationFrame(draw)
+      }
+
+      function drawBall() {
+        ctx.beginPath()
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+        ctx.fillStyle = 'black'
+        ctx.fill()
+        ctx.closePath()
+      }
+
+      function drawPaddle1() {
+        ctx.font = '48px serif'
+        ctx.fillText('🎻', 10, paddle1Y + paddleHeight / 2 + 20)
+      }
+
+      function drawPaddle2() {
+        ctx.font = '48px serif'
+        ctx.fillText('🎹', canvas.width - 50, paddle2Y + paddleHeight / 2 + 20)
+      }
+
+      function drawScore() {
+        ctx.font = '24px Arial'
+        ctx.fillStyle = 'black'
+        ctx.fillText('Player 1: ' + score1, 20, 30)
+        ctx.fillText('Player 2: ' + score2, canvas.width - 140, 30)
+      }
+
+      function moveBall() {
+        ball.x += ball.dx
+        ball.y += ball.dy
+
+        // Collision with walls
+        if (
+          ball.y + ball.dy > canvas.height - ball.radius ||
+          ball.y + ball.dy < ball.radius
+        ) {
+          ball.dy = -ball.dy
+        }
+
+        // Collision with paddles
+        if (
+          ball.x - ball.radius < paddleWidth &&
+          ball.y > paddle1Y &&
+          ball.y < paddle1Y + paddleHeight
+        ) {
+          ball.dx = -ball.dx
+          score1++
+        } else if (
+          ball.x + ball.radius > canvas.width - paddleWidth &&
+          ball.y > paddle2Y &&
+          ball.y < paddle2Y + paddleHeight
+        ) {
+          ball.dx = -ball.dx
+          score2++
+        }
+
+        // Reset ball if it goes out of bounds
+        if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+          ball.x = canvas.width / 2
+          ball.y = canvas.height / 2
+          ball.dx = -ball.dx
+        }
+      }
+
+      function movePaddles() {
+        if (paddle1Y < 0) {
+          paddle1Y = 0
+        }
+        if (paddle1Y > canvas.height - paddleHeight) {
+          paddle1Y = canvas.height - paddleHeight
+        }
+        if (paddle2Y < 0) {
+          paddle2Y = 0
+        }
+        if (paddle2Y > canvas.height - paddleHeight) {
+          paddle2Y = canvas.height - paddleHeight
+        }
+      }
+
+      draw()
+    </script>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+      <p>
+        use w to: move the violin up.
+        <br>
+        use s to: move the violin down
+<br>
+        use the up arrow to: move the piano up
+        <br>
+        use the down arrow to: move the piano down
+      </p>
+  </body>
+</html>

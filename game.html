@@ -1,0 +1,111 @@
+<html lang="en">
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="navbar.css" />
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>violin vs painoTic Tac Toe</title>
+  </head>
+  <style>
+    .board {
+      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 5px;
+      justify-content: center;
+      margin-top: 50px;
+    }
+    .cell {
+      align-content: center;
+      width: 100px;
+      height: 100px;
+      font-size: 36px;
+      text-align: center;
+      line-height: 100px;
+      border: 2px solid #000;
+      cursor: pointer;
+    }
+  </style>
+  <body id="game">
+    <ul>
+      <li><a class="active" href="game.html">tic tac toe</a></li>
+      <li><a href="pingpong.html">ping pong</a></li>
+      <li><a href="violinplayers.html">vivaldi</a></li>
+      <li><a href="index.html">home</a></li>
+    </ul>
+    <h1 style="text-align: center">Tic Tac Teo 🎻VS🎹</h1>
+
+    <div class="board" id="board">
+      <div class="cell" onclick="placeMarker(0)"></div>
+      <div class="cell" onclick="placeMarker(1)"></div>
+      <div class="cell" onclick="placeMarker(2)"></div>
+      <div class="cell" onclick="placeMarker(3)"></div>
+      <div class="cell" onclick="placeMarker(4)"></div>
+      <div class="cell" onclick="placeMarker(5)"></div>
+      <div class="cell" onclick="placeMarker(6)"></div>
+      <div class="cell" onclick="placeMarker(7)"></div>
+      <div class="cell" onclick="placeMarker(8)"></div>
+    </div>
+    <div
+      style="display: flex; justify-content: center; margin: 10px"
+      id="again"
+    ></div>
+
+    <script>
+      let currentPlayer = "violin"; // 'violin' or 'piano'
+      const cells = document.querySelectorAll(".cell");
+      const reload = document.createElement("button");
+      reload.innerText = "Play Again!";
+      reload.onclick = function () {
+        location.reload();
+      };
+
+      function placeMarker(cellIndex) {
+        if (cells[cellIndex].innerHTML === "") {
+          cells[cellIndex].innerHTML = currentPlayer === "violin" ? "🎻" : "🎹";
+          currentPlayer = currentPlayer === "violin" ? "piano" : "violin";
+          checkWin();
+        }
+      }
+
+      function checkWin() {
+        const winningConditions = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8], // Rows
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8], // Columns
+          [0, 4, 8],
+          [2, 4, 6], // Diagonals
+        ];
+
+        for (let condition of winningConditions) {
+          const [a, b, c] = condition;
+          if (
+            cells[a].innerHTML &&
+            cells[a].innerHTML === cells[b].innerHTML &&
+            cells[a].innerHTML === cells[c].innerHTML
+          ) {
+            alert(`${cells[a].innerHTML === "🎻" ? "Violin" : "Piano"} wins!`);
+            // resetBoard();
+            document.getElementById("again").appendChild(reload);
+            return;
+          }
+        }
+      }
+
+      function resetBoard() {
+        cells.forEach((cell) => {
+          cell.innerHTML = "";
+        });
+        currentPlayer = "violin";
+      }
+    </script>
+  </body>
+</html>
